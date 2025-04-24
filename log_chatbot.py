@@ -35,19 +35,33 @@ if st.button("Submit"):
     }
 
     with st.spinner("Calculating..."):
-        response = requests.post(api_url, json=payload)
-        if response.ok:
-            data = response.json()
+        try:
+            response = requests.post(api_url, json=payload)
+            st.write("Status Code:", response.status_code)
 
-            st.success("✅ Calculation complete.")
-            st.subheader("Pass/Fail Results")
-            st.json(data["Results"]["PassFail"])
+            if response.ok:
+                try:
+                    data = response.json()
+                    st.success("✅ Calculation complete.")
 
-            st.subheader("Factors of Safety")
-            st.json(data["Equations"])
+                    st.subheader("Pass/Fail Results")
+                    st.json(data["Results"]["PassFail"])
 
-            st.subheader("Design Recommendations")
-            for rec in data["Recommendations"]:
-                st.markdown(f"- {rec}")
-        else:
-            st.error("❌ API call failed. Check inputs or try again.")
+                    st.subheader("Factors of Safety")
+                    st.json(data["Equations"])
+
+                    st.subheader("Design Recommendations")
+                    for rec in data["Recommendations"]:
+                        st.markdown(f"- {rec}")
+
+                except Exception as json_error:
+                    st.error("⚠️ Could not parse JSON. Showing raw response:")
+                    st.text(response.text)
+            else:
+                st.error("❌ API call failed with status code:")
+                st.code(response.status_code)
+                st.text(response.text)
+
+        except Exception as e:
+            st.error("❌ Request failed entirely.")
+            st.text(str(e))
