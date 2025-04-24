@@ -4,7 +4,7 @@ import requests
 st.set_page_config(page_title="Log Stability Assistant", page_icon="🌲")
 st.title("🌲 Log Stability Assistant")
 
-st.markdown("Fill out the form below to check log stability based on USDA & ELJ guidelines.")
+st.markdown("Fill out the form below to check log stability based on Rafferty & ELJ guidelines.")
 
 length = st.number_input("Log Length (ft)", 1.0, 200.0, value=40.0)
 diameter = st.number_input("Diameter (ft)", 0.1, 10.0, value=1.7)
